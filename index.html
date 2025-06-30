@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>😴 Membros Inativos</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #ff0000;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #1a1a1a;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #444;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #111;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #333;
+    }
+
+    .intro {
+      color: #ccc;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+
+    form {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 5px 0 0 5px;
+      font-size: 1rem;
+      background-color: #222;
+      color: #fff;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #ff0000;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 0 5px 5px 0;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #cc0000;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background-color: #1a1a1a;
+      margin-bottom: 10px;
+      padding: 15px;
+      border-left: 5px solid #ff0000;
+      color: #fff;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .remove-btn {
+      background-color: transparent;
+      border: none;
+      color: #ccc;
+      cursor: pointer;
+      font-size: 1.2rem;
+      margin-left: 10px;
+    }
+
+    .remove-btn:hover {
+      color: #ff0000;
+    }
+
+    footer {
+      text-align: center;
+      color: #777;
+      font-size: 0.9rem;
+      margin-top: 40px;
+      padding-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>😴 Membros Sumidos ou Inativos</h1>
+  </header>
+
+  <div class="container">
+    <p class="intro">Lista de irmãos e irmãs que sentimos falta nos cultos. Ore por eles e, se possível, entre em contato com amor. 💌</p>
+
+    <form id="member-form">
+      <input type="text" id="member-name" placeholder="Nome do membro inativo..." required />
+      <button type="submit">Adicionar</button>
+    </form>
+
+    <ul id="member-list"></ul>
+  </div>
+
+  <footer>
+    &copy; 2025 Ministério de Acompanhamento da Igreja | Feito com amor
+  </footer>
+
+  <script>
+    const memberForm = document.getElementById('member-form');
+    const memberInput = document.getElementById('member-name');
+    const memberList = document.getElementById('member-list');
+
+    // Recuperar membros do localStorage
+    let members = JSON.parse(localStorage.getItem('membrosInativos')) || [];
+
+    // Função para salvar
+    function saveMembers() {
+      localStorage.setItem('membrosInativos', JSON.stringify(members));
+    }
+
+    // Função para renderizar a lista
+    function renderList() {
+      memberList.innerHTML = '';
+      members.forEach((name, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          ${name}
+          <button class="remove-btn" onclick="removeMember(${index})">✖</button>
+        `;
+        memberList.appendChild(li);
+      });
+    }
+
+    // Adicionar membro
+    memberForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = memberInput.value.trim();
+      if (name !== '') {
+        members.push(name);
+        saveMembers();
+        renderList();
+        memberInput.value = '';
+      }
+    });
+
+    // Remover membro
+    function removeMember(index) {
+      members.splice(index, 1);
+      saveMembers();
+      renderList();
+    }
+
+    // Inicializar
+    renderList();
+  </script>
+</body>
+</html>
